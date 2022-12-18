@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apline Todo list</title>
+  <style>
+    .delete:hover {
+      cursor: pointer;
+    }
+    .completed {
+      text-decoration: line-through;
+    }
+  </style>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+  <div>
+    <h2>AlpineJS Playground!</h2>
+  </div>
+  <div x-data="{ todos: [], userInput: '', ctr: 1}">
+
+    <!-- Step 1: Add a new todo -->
+    <form x-on:submit.prevent>   <!-- <form> allows pressing enter to add a new item-->
+    <input type="text" x-model="userInput" placeholder="Enter a todo item" >
+      <!-- Step 4: Validation -->
+      <button 
+        @click="if(userInput.trim().length) todos.push({ id: ctr, name: userInput, completed: false});
+          ctr++; 
+          userInput='';">
+        Add
+      </button>
+    </form>
+
+
+    <!-- Step 2: List todos -->
+    <template x-for="todo in todos" :key="todo.id"> <!-- not sure if the key is correct -->
+      <div>
+        <input type="checkbox" x-model="todo.completed">
+
+        <!-- Step 6: Mark Completed -->
+        <span x-text="todo.name" x-bind:class="{'completed': todo.completed == true}"></span>
+
+        <!-- Step 3: Remove a todo from todos -->
+        <button @click="todos = todos.filter((currTodo) => currTodo != todo)" class="delete">
+          ❌
+        </button>
+        <button>
+          🖊️
+        </button>
+      </div>
+    </template>
+
+    <!-- Step 5: Clear all -->
+    <button @click="todos = []" x-show="todos.length">Clear all</button>
+
+    <!-- Step 7: Show summary -->
+    <div x-show="todos.length">
+      <span x-text="todos.filter((todo) => todo.completed).length"></span> / 
+      <span x-text="todos.length" ></span> completed
+    </div>
+  </div>
+  
+</body>
+</html>
