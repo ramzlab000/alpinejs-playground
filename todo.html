@@ -13,17 +13,18 @@
       text-decoration: line-through;
     }
   </style>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body>
+<body class="antialiased p-6">
   <div>
-    <h2>AlpineJS Playground!</h2>
+    <h1 class="text-3xl pb-6">AlpineJS Playground!</h1>
   </div>
   <div x-data="{ todos: [], userInput: '', ctr: 1, editing: false, curId: null}">
 
     <!-- Step 1: Add a new todo -->
-    <form x-on:submit.prevent>   <!-- <form> allows pressing enter to add a new item-->
-    <input type="text" x-model="userInput" placeholder="Enter a todo item" >
+    <form x-on:submit.prevent class="mb-6">   <!-- <form> allows pressing enter to add a new item-->
+      <input class="border border-solid" type="text" x-model="userInput" placeholder="Enter a todo item" >
       <!-- Step 4: Validation -->
       <button 
         @click="if(userInput.trim().length) 
@@ -55,7 +56,7 @@
         <input type="checkbox" x-model="todo.completed">
 
         <!-- Step 6: Mark Completed -->
-        <span x-text="todo.name" x-bind:class="{'completed': todo.completed == true}"></span>
+        <span x-text="todo.name" class="pr-6" x-bind:class="{'completed': todo.completed == true}"></span>
 
         <!-- Step 3: Remove a todo from todos -->
         <button @click="todos = todos.filter((currTodo) => currTodo != todo)" class="delete">
@@ -68,14 +69,22 @@
     </template>
 
     <!-- Step 5: Clear all -->
-    <button @click="todos = []" x-show="todos.length">Clear all</button>
+    <button class="mt-6 text-red-600 font-bold text-xs" @click="todos = []" x-show="todos.length > 1">Clear all</button>
 
     <!-- Step 7: Show summary -->
-    <div x-show="todos.length" style="font-size:small;">
+    <div class="mt-6 text-xs" x-show="todos.length">
       <span x-text="todos.filter((todo) => todo.completed).length"></span> / 
       <span x-text="todos.length" ></span> completed
     </div>
+
+    <div x-show="todos.filter((todo) => todo.completed).length">
+      <p>Here are the completed items</p>
+      
+    </div>
+    
+
   </div>
-  
+
+
 </body>
 </html>
