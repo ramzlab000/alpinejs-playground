@@ -77,8 +77,14 @@
       <span x-text="todos.length" ></span> completed
     </div>
 
-    <div x-show="todos.filter((todo) => todo.completed).length">
+    <div class="text-xs pt-6" x-show="todos.filter((todo) => todo.completed).length">
       <p>Here are the completed items</p>
+      <template x-for="todo in todos" :key="todo.id">
+        <template x-if="todo.completed">
+          <div>🚩<span class="text-sm" x-text="todo.name"></span></div>
+        </template>
+
+      </template>
       
     </div>
     
