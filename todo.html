@@ -19,16 +19,31 @@
   <div>
     <h2>AlpineJS Playground!</h2>
   </div>
-  <div x-data="{ todos: [], userInput: '', ctr: 1}">
+  <div x-data="{ todos: [], userInput: '', ctr: 1, editing: false, curId: null}">
 
     <!-- Step 1: Add a new todo -->
     <form x-on:submit.prevent>   <!-- <form> allows pressing enter to add a new item-->
     <input type="text" x-model="userInput" placeholder="Enter a todo item" >
       <!-- Step 4: Validation -->
       <button 
-        @click="if(userInput.trim().length) todos.push({ id: ctr, name: userInput, completed: false});
-          ctr++; 
-          userInput='';">
+        @click="if(userInput.trim().length) 
+          if(editing) {
+            todos = todos.map((obj => { 
+              if(obj.id == curId) {
+                obj.name =  userInput;
+                return obj;
+              } else {
+                return obj;
+              }
+            }));
+            editing = false;
+            curId = null;
+          } else {
+            todos.push({ id: ctr, name: userInput, completed: false});
+            ctr++;
+          }
+          userInput='';"
+        x-text="(editing) ? 'Edit' : 'Add'">
         Add
       </button>
     </form>
@@ -46,7 +61,7 @@
         <button @click="todos = todos.filter((currTodo) => currTodo != todo)" class="delete">
           ❌
         </button>
-        <button>
+        <button @click="editing = true; curId = todo.id; console.log(todo); userInput=todo.name">
           🖊️
         </button>
       </div>
@@ -56,7 +71,7 @@
     <button @click="todos = []" x-show="todos.length">Clear all</button>
 
     <!-- Step 7: Show summary -->
-    <div x-show="todos.length">
+    <div x-show="todos.length" style="font-size:small;">
       <span x-text="todos.filter((todo) => todo.completed).length"></span> / 
       <span x-text="todos.length" ></span> completed
     </div>
